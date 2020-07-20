@@ -1,7 +1,7 @@
 #include "DAC.h"
 
 /// DAC
-nBlock_DAC::nBlock_DAC(PinName pinDAC, uint16t preset): _dac(pinDAC) {
+nBlock_DAC::nBlock_DAC(PinName pinDAC, uint16_t preset): _dac(pinDAC) {
     _preset = (float)preset/65535;
     _dac = _preset;
     pritf("preset= %f ",_preset)
