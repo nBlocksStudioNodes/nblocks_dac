@@ -7,7 +7,7 @@
 class nBlock_DAC: public nBlockSimpleNode<1> {
 public:
     nBlock_DAC(PinName pinDAC, uint16_t preset);
-    void triggerInput(uint32_t inputNumber, uint32_t value);
+    void triggerInput(nBlocks_Message message);
 private:
     AnalogOut _dac;
     float _preset;

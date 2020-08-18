@@ -7,12 +7,30 @@ nBlock_DAC::nBlock_DAC(PinName pinDAC, uint16_t preset): _dac(pinDAC) {
     return;
 }
 
-void nBlock_DAC::triggerInput(uint32_t inputNumber, uint32_t value) {
-    // Input 0 triggers a read regardless of value
+void nBlock_DAC::triggerInput(nBlocks_Message message) {
     float fval;
-    if (value < 65535) {
-        fval = (float)value/65535; //make floating normalized 0-1
-        _dac = fval;                 
-    }
+
+    // Input 0 triggers a read regardless of value
+    if (message.inputNumber == 0) {
+		// Select a different writing method depending on data type
+		if (message.dataType == OUTPUT_TYPE_FLOAT) {
+			// Float: Make sure we have a value in the [0.0, 1.0] range
+			fval = message.floatValue;
+			if (fval > 1.0) fval = 1.0;
+			if (fval < 0.0) fval = 0.0;
+			_dac = fval;
+		}
+		else if (message.dataType == OUTPUT_TYPE_INT) {
+			// Int: convert to float by normalizing to 65535
+			if (value < 65535) {
+				fval = (float)value/65535; //make floating normalized 0-1
+				_dac = fval;                 
+			}
+		}
+		else {
+			// Unknown data type. Just ignore and fail silently
+		}
+    }	
+	
 }
 
